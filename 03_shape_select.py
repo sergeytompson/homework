@@ -17,6 +17,7 @@ def figure(vector, injection, deviation, repeat, long, figure_color):
         point = vector.end_point
         injection += deviation
         vector = sd.get_vector(point, injection, long, width=3)
+    # TODO аналогично 01_shapes.py
     sd.line(point, end, width=3, color=figure_color)
 
 
@@ -44,6 +45,8 @@ colors = [('red', sd.COLOR_RED), ('orange', sd.COLOR_ORANGE), ('yellow', sd.COLO
           ('green', sd.COLOR_GREEN), ('cyan', sd.COLOR_CYAN), ('blue', sd.COLOR_BLUE),
           ('purple', sd.COLOR_PURPLE)]
 
+
+
 print('Возможные цвета:')
 for num, color in enumerate(colors):
     print(f'{num}: {color[0]}')
@@ -51,6 +54,22 @@ for num, color in enumerate(colors):
 
 def check_input():
     while True:
+        # TODO где то здесь должен быть выбор фигур
+        """
+        в списке ты можешь так же хранить функции, например
+        figures = [
+            ('triangle', triangle), ('hexagon', hexagon)
+]
+        ты можешь получить аналогично цвету нужную тебе функцию и записать ее в переменную и вызвать:
+        
+        def get_func_from_input():
+            ...
+            return func
+        
+        shape_func = get_func_from_input()
+        shape_func()
+        
+        """
         num = input('Введите число от 0 до 6, соответствующее нужному цвету: ')
         if not num.isdigit():
             print('Ошибка')
@@ -63,16 +82,16 @@ def check_input():
             break
     return num
 
-
+# TODO аналогично 01_shapes.py
 num = check_input()
 color = colors[num][1]
-point_4 = sd.get_point(100, 500)
-hexagon(point_4, 120, 50, hexagon_color=color)
-point_3 = sd.get_point(100, 100)
-pentagon(point_3, 60, 50, pentagon_color=color)
-point_2 = sd.get_point(500, 100)
-square(point_2, 20, 50, square_color=color)
-point_1 = sd.get_point(500, 500)
-triangle(point_1, 40, 50, triangle_color=color)
+# point_4 = sd.get_point(100, 500)
+# hexagon(point_4, 120, 50, hexagon_color=color)
+# point_3 = sd.get_point(100, 100)
+# pentagon(point_3, 60, 50, pentagon_color=color)
+# point_2 = sd.get_point(500, 100)
+# square(point_2, 20, 50, square_color=color)
+# point_1 = sd.get_point(500, 500)
+# triangle(point_1, 40, 50, triangle_color=color)
 
 sd.pause()

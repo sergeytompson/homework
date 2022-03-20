@@ -67,6 +67,7 @@ def draw_branches(start_point, angle, length):
     draw_branches(second_end, second_angle, length)
 
 
+# TODO аналогично 01_shapes.py
 root_point = sd.get_point(600, 30)
 trunk = sd.get_vector(root_point, 270, 30)
 trunk.draw()

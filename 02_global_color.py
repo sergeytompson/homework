@@ -22,6 +22,7 @@ def figure(vector, injection, deviation, repeat, long, color):
         point = vector.end_point
         injection += deviation
         vector = sd.get_vector(point, injection, long, width=3)
+    # TODO аналогично 01_shapes.py
     sd.line(point, end, width=3, color=color)
 
 
@@ -69,6 +70,7 @@ def check_input():
     return num
 
 
+# TODO аналогично 01_shapes.py
 num = check_input()
 color = colors[num][1]
 point_4 = sd.get_point(100, 500)
