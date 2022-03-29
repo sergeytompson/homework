@@ -30,20 +30,25 @@ N = 20
 #  и из упавших (с неизменяемымии координатами)
 
 snowflakes_params = [[sd.random_number(0, 1200), 600, sd.random_number(10, 60)] for _ in range(N)]
+dropped_out_snowflakes = []
 while True:
-    # sd.start_drawing()
-    sd.clear_screen()
+    sd.start_drawing()
+    # sd.clear_screen()
     for snowflake in snowflakes_params:
         if snowflake[1] <= snowflake[2]:
+            dropped_out_snowflakes.append(snowflake)
             index = snowflakes_params.index(snowflake)
             snowflakes_params[index] = [sd.random_number(0, 1200), 600, sd.random_number(10, 60)]
-        # current_point = sd.get_point(snowflake[0], snowflake[1])
-        # sd.snowflake(current_point, snowflake[2], sd.background_color)
+        current_point = sd.get_point(snowflake[0], snowflake[1])
+        sd.snowflake(current_point, snowflake[2], sd.background_color)
         snowflake[1] -= sd.random_number(1, 15)
         snowflake[0] += sd.random_number(-15, 15)
         current_point = sd.get_point(snowflake[0], snowflake[1])
         sd.snowflake(current_point, snowflake[2])
-    # sd.finish_drawing()
+    for snowflake in dropped_out_snowflakes:
+        current_point = sd.get_point(snowflake[0], snowflake[1])
+        sd.snowflake(current_point, snowflake[2])
+    sd.finish_drawing()
     sd.sleep(0.1)
     if sd.user_want_exit():
         break

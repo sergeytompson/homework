@@ -17,12 +17,12 @@ import simple_draw as sd
 
 def figure(vector, injection, deviation, repeat, long, color):
     end = vector.start_point
+    point = vector.end_point
     for _ in range(repeat):
         vector.draw(color=color)
         point = vector.end_point
         injection += deviation
         vector = sd.get_vector(point, injection, long, width=3)
-    # TODO аналогично 01_shapes.py
     sd.line(point, end, width=3, color=color)
 
 
@@ -70,16 +70,16 @@ def check_input():
     return num
 
 
-# TODO аналогично 01_shapes.py
-num = check_input()
-color = colors[num][1]
-point_4 = sd.get_point(100, 500)
-hexagon(point_4, 120, 50, color=color)
-point_3 = sd.get_point(100, 100)
-pentagon(point_3, 60, 50, color=color)
-point_2 = sd.get_point(500, 100)
-square(point_2, 20, 50, color=color)
-point_1 = sd.get_point(500, 500)
-triangle(point_1, 40, 50, color=color)
+if __name__ == '__main__':
+    num = check_input()
+    color = colors[num][1]
+    point_4 = sd.get_point(100, 500)
+    hexagon(point_4, 120, 50, color=color)
+    point_3 = sd.get_point(100, 100)
+    pentagon(point_3, 60, 50, color=color)
+    point_2 = sd.get_point(500, 100)
+    square(point_2, 20, 50, color=color)
+    point_1 = sd.get_point(500, 500)
+    triangle(point_1, 40, 50, color=color)
 
 sd.pause()

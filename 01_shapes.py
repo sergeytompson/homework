@@ -31,15 +31,12 @@ import simple_draw as sd
 
 def figure(vector, injection, deviation, repeat, long):
     end = vector.start_point
+    point = vector.end_point
     for _ in range(repeat):
         vector.draw()
         point = vector.end_point
         injection += deviation
         vector = sd.get_vector(point, injection, long, width=3)
-    # TODO обращай внимание на подсказки PyCharm (Local variable 'point' might be referenced before assignment)
-    #  говорит, о том что ты определяешь переменную point внутри цикла и в случае, если range будет передан 0 (цикл
-    #  пропустится, то интерпретатор упадет с ошибкой)  то есть значение по умолчанию у point должно быть до входа в
-    #  цикл
     sd.line(point, end, width=3)
 
 
@@ -48,19 +45,9 @@ def triangle(point, injection, long):
     figure(vector, injection, 120, 2, long)
 
 
-# TODO привыкай делать вызов функции внизу файла, а не после объявления, а еще лучше заворачивать вызовы в
-#  специальный блок if __name__ == '__main__': (напчеатал его ниже)
-point_1 = sd.get_point(500, 500)
-triangle(point_1, 40, 50)
-
-
 def square(point, injection, long):
     vector = sd.get_vector(point, injection, long, width=3)
     figure(vector, injection, 90, 3, long)
-
-
-point_2 = sd.get_point(500, 100)
-square(point_2, 20, 50)
 
 
 def pentagon(point, injection, long):
@@ -68,17 +55,10 @@ def pentagon(point, injection, long):
     figure(vector, injection, 72.1, 4, long)
 
 
-point_3 = sd.get_point(100, 100)
-pentagon(point_3, 60, 50)
-
-
 def hexagon(point, injection, long):
     vector = sd.get_vector(point, injection, long, width=3)
     figure(vector, injection, 60, 5, long)
 
-
-point_4 = sd.get_point(100, 500)
-hexagon(point_4, 120, 50)
 
 # Часть 1-бис.
 # Попробуйте прикинуть обьем работы, если нужно будет внести изменения в этот код.
@@ -104,18 +84,13 @@ hexagon(point_4, 120, 50)
 # Будьте ленивыми, не используйте копи-пасту!
 
 
-sd.pause()
-
-# TODO обрати внимание на эту конструкцию:
-#  она гарантирует, что код внутри будет запущен если мы запускаем именно данный файл напрямую
-#  для чего это может быть нужно:
-#  обычно программу делят на логически обособленные участки по файлам и часто приходится имортировать что-то (функцию или переменную) из одного файла в другой
-#  в твоем случае при импорте, прочитаются объявления функций и их вызов, то есть они и импортируются и нарисуются
-#  пример в test_import
 if __name__ == '__main__':
-    # здесь вызов твоих функций
-    # point_1 = sd.get_point(500, 500)
-    # triangle(point_1, 40, 50)
-    # итд
-    ...
-
+    point_1 = sd.get_point(500, 500)
+    triangle(point_1, 40, 50)
+    point_2 = sd.get_point(500, 100)
+    square(point_2, 20, 50)
+    point_3 = sd.get_point(100, 100)
+    pentagon(point_3, 60, 50)
+    point_4 = sd.get_point(100, 500)
+    hexagon(point_4, 120, 50)
+    sd.pause()
