@@ -50,3 +50,5 @@ def serega_burger():
 if __name__ == '__main__':
     double_cheeseburger()
     serega_burger()
+
+# good
