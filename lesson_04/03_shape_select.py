@@ -2,6 +2,7 @@
 
 import simple_draw as sd
 
+
 # Запросить у пользователя желаемую фигуру посредством выбора из существующих
 #   вывести список всех фигур с номерами и ждать ввода номера желаемой фигуры.
 # и нарисовать эту фигуру в центре экрана
@@ -9,7 +10,7 @@ import simple_draw as sd
 # Код функций из упр lesson_004/02_global_color.py скопировать сюда
 # Результат решения см lesson_004/results/exercise_03_shape_select.jpg
 
-
+# TODO здесь figure
 def figure(vector, injection, deviation, repeat, long, figure_color):
     end = vector.start_point
     point = vector.end_point
@@ -47,6 +48,7 @@ colors = [('red', sd.COLOR_RED), ('orange', sd.COLOR_ORANGE), ('yellow', sd.COLO
 
 figures = [('triangle', triangle), ('square', square), ('pentagon', pentagon), ('hexagon', hexagon)]
 
+# TODO и здесь figure
 print('Возможные фигуры:')
 for num, figure in enumerate(figures):
     print(f'{num}: {figure[0]}')
