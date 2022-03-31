@@ -23,4 +23,4 @@ all_folks.extend(soviet_house2_room2.folks)
 if __name__ == '__main__':
     print('На районе живут', ', '.join(all_folks))
 
-# good
+# good!

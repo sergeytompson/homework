@@ -40,3 +40,5 @@ def bacon():
 
 def scramble():
     print('А теперь добавим болтунью')
+
+# good!

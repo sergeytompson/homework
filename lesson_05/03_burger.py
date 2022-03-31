@@ -51,4 +51,4 @@ if __name__ == '__main__':
     double_cheeseburger()
     serega_burger()
 
-# good
+# good!

@@ -47,3 +47,4 @@ def sun(angle, rays_list):
 def delete_rays(rays_list):
     for ray in rays_list:
         sd.vector(ray[0], ray[1], 100, sd.background_color, 3)
+#  good !

@@ -38,3 +38,4 @@ def roof(ground_level, deviation=20, height=100):
     third_point = sd.get_point(START_HOUSE + (deviation + WIDTH_HOUSE) // 2, base_y + height)
     points = [first_point, second_point, third_point]
     sd.polygon(points, color=sd.COLOR_DARK_ORANGE, width=0)
+#  good !
