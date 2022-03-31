@@ -132,3 +132,5 @@ dmypy.json
 
 # IDEA temp files
 .idea/
+/lesson_05/.idea/
+/lesson_04/.idea/
