@@ -10,7 +10,7 @@ import simple_draw as sd
 # Код функций из упр lesson_004/02_global_color.py скопировать сюда
 # Результат решения см lesson_004/results/exercise_03_shape_select.jpg
 
-# TODO здесь figure
+
 def figure(vector, injection, deviation, repeat, long, figure_color):
     end = vector.start_point
     point = vector.end_point
@@ -34,7 +34,7 @@ def square(point, injection, long, color):
 
 def pentagon(point, injection, long, color):
     vector = sd.get_vector(point, injection, long, width=3)
-    figure(vector, injection, long, 72.1, 4, figure_color=color)
+    figure(vector, injection, 72.1, 4, long, figure_color=color)
 
 
 def hexagon(point, injection, long, color):
@@ -48,14 +48,15 @@ colors = [('red', sd.COLOR_RED), ('orange', sd.COLOR_ORANGE), ('yellow', sd.COLO
 
 figures = [('triangle', triangle), ('square', square), ('pentagon', pentagon), ('hexagon', hexagon)]
 
-# TODO и здесь figure
-print('Возможные фигуры:')
-for num, figure in enumerate(figures):
-    print(f'{num}: {figure[0]}')
 
-print('Возможные цвета:')
-for num, color_from_colors in enumerate(colors):
-    print(f'{num}: {color_from_colors[0]}')
+def offer_a_choice():
+    print('Возможные фигуры:')
+    for num, possible_figure in enumerate(figures):
+        print(f'{num}: {possible_figure[0]}')
+
+    print('Возможные цвета:')
+    for num, color_from_colors in enumerate(colors):
+        print(f'{num}: {color_from_colors[0]}')
 
 
 def check_input_figure():
@@ -89,6 +90,7 @@ def check_input_color():
 
 
 if __name__ == '__main__':
+    offer_a_choice()
     figure_number = check_input_figure()
     chosen_figure = figures[figure_number][1]
     color_number = check_input_color()
