@@ -45,10 +45,12 @@
 
 import mastermind_engine as me
 
+
+# TODO забыл про счетчик ходов!
 if __name__ == '__main__':
     print('Давай сыграем в быков и коров!')
     while True:
-        hidden_num = me.think_of_a_number()
+        hidden_num = me.generate_number()
         while True:
             while True:
                 user_num = input(
@@ -60,6 +62,9 @@ if __name__ == '__main__':
                 else:
                     break
             answer = me.bulls_cows(user_num, hidden_num)
+
+            # TODO обрати вимание на комментарий для функции bulls_cows
+            #  лучше получать кол-во быков и коров, проверять и "поздравлять" уже здесь
             if isinstance(answer, tuple):
                 bulls, cows = answer
                 print(f'быки - {bulls}, коровы - {cows}')
@@ -67,6 +72,7 @@ if __name__ == '__main__':
             else:
                 print(answer)
                 break
+
         while True:
             new_game = input('Хотите сыграть еще? (ответьте да или нет) ').lower()
             if new_game != 'да' and new_game != 'нет':
