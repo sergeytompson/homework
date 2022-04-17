@@ -24,25 +24,20 @@ def move_snowflakes() -> None:
 
 def went_abroad() -> set:
     global _snowflakes_list
-    cnt = 0
     dropped_set = set()
-    # TODO при написании цикла исходи из того, что ты будешь использовать в дальнейшем
-    #  здесь ты итерируешься по элементам, но отдаешь их индексы в множество,
-    #  уместнее было бы итерироваться по индексу и отдавать его
-    for snowflake in _snowflakes_list:
-        # TODO условие выглядит уж как то слишком перегружено и страшно :)
-        #  где то 1200 еще используется (намек)?
-        if 0 - snowflake[2] >= snowflake[0] >= 1200 + snowflake[2] or snowflake[1] <= 0 - snowflake[2] * 2:
-            dropped_set.add(cnt)
-        cnt += 1
+    for i in range(len(_snowflakes_list)):
+        snowflake = _snowflakes_list[i]
+        if 0 - snowflake[2] >= snowflake[0] >= sd.resolution[0] + snowflake[2]:
+            dropped_set.add(i)
+        elif snowflake[1] <= 0 - snowflake[2] * 2:
+            dropped_set.add(i)
     return dropped_set
 
 
 def delete_snowflakes(snowflakes_set: set) -> None:
-    # TODO использование дел выглядит очень устрашающе
-    #  из списка можно удалять как по индксу pop(), так и по значение remove()
+    #  Здесь не очень понял в чем претензия была. Именно к использованию del или к использованию счетчика?
     global _snowflakes_list
     cnt = 0
     for i in snowflakes_set:
-        del _snowflakes_list[i - cnt]
+        _snowflakes_list.pop(i - cnt)
         cnt += 1
