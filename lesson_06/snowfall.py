@@ -35,9 +35,7 @@ def went_abroad() -> set:
 
 
 def delete_snowflakes(snowflakes_set: set) -> None:
-    #  Здесь не очень понял в чем претензия была. Именно к использованию del или к использованию счетчика?
     global _snowflakes_list
-    cnt = 0
-    for i in snowflakes_set:
-        _snowflakes_list.pop(i - cnt)
-        cnt += 1
+    snowflakes_list = sorted(snowflakes_set, reverse=True)
+    for i in snowflakes_list:
+        _snowflakes_list.pop(i)

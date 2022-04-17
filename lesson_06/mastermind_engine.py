@@ -11,7 +11,6 @@ def generate_number(digits_count: int = 4) -> str:
     return first_char + result
 
 
-# Попробовал реализовать более простой вариант по-своему
 def think_of_a_number() -> str:
     global _num
     _num = ''
@@ -20,7 +19,7 @@ def think_of_a_number() -> str:
     numbers.remove(first_num)
     _num += first_num
     for _ in range(3):
-        second_num = first_num = choice(numbers)
+        second_num = choice(numbers)
         numbers.remove(second_num)
         _num += first_num
     return _num
@@ -40,7 +39,4 @@ def check_answer(user_num: str) -> bool:
     for i in range(len(user_num) - 1):
         if user_num.count(user_num[i], i) > 1:
             return False
-    if user_num.isdigit() and len(user_num) == 4 and user_num[0] != '0':
-        return True
-    else:
-        return False
+    return user_num.isdigit() and len(user_num) == 4 and user_num[0] != '0'
