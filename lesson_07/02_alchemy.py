@@ -113,6 +113,10 @@ class Lava:
 
 
 if __name__ == '__main__':
+    # TODO можно немного упросить
+    #  air = Air()
+    #  water = Water()
+    #  сути это не поменяет, но будет читаемее, как по мне
     print(Air(), '+', Water(), '=', Air() + Water())
     print(Water(), '+', Air(), '=', Water() + Air())
     print(Air(), '+', Fire(), '=', Air() + Fire())
