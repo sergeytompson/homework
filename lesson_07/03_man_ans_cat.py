@@ -35,7 +35,6 @@ class Man:
         self.house = None
 
     def __str__(self) -> str:
-        # TODO лучше использовать f строки, они работают быстрее и сообщение получается компактнее
         return 'Я - {}, сытость {}'.format(
             self.name, self.fullness)
 
