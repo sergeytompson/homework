@@ -44,14 +44,18 @@ from random import randint
 
 class House:
 
+    total_money = 0
+    total_food = 0
+
     def __init__(self):
         self.money = 100
         self.food = 50
         self.dirt = 0
+        self.cat_food = 30
 
     def __str__(self):
         self.dirt += 5
-        return f'В доме еды - {self.food}, денег - {self.money}, грязи - {self.dirt}'
+        return f'В доме еды - {self.food}, кошачьей еды - {self.cat_food}, денег - {self.money}, грязи - {self.dirt}'
 
 
 class Human:
@@ -62,7 +66,7 @@ class Human:
         self.happiness = 100
         self.house = house
 
-    def __str__(self) -> str:
+    def __str__(self):
         return f'Я {self.name}, сытость - {self.fullness}, счастье - {self.happiness}'
 
     def eat(self) -> None:
@@ -70,10 +74,16 @@ class Human:
             self.fullness -= 10
         elif self.house.food >= 30:
             self.house.food -= 30
+            House.total_food += 30
             self.fullness += 30
         else:
             self.fullness += self.house.food
+            House.total_food += self.house.food
             self.house.food = 0
+
+    def pet_a_cat(self) -> None:
+        self.happiness += 5
+        self.fullness -= 10
 
 
 class Husband(Human):
@@ -81,29 +91,47 @@ class Husband(Human):
     def __str__(self):
         return super().__str__()
 
-    def work(self):
+    def work(self) -> None:
         self.fullness -= 10
         self.happiness -= 5
         self.house.money += 150
+        House.total_money += 150
 
-    def gaming(self):
+    def gaming(self) -> None:
         self.happiness += 20
         self.fullness -= 10
 
+    def buy_cat_food(self) -> None:
+        self.house.money -= 30
+        self.house.cat_food += 30
+        self.fullness -= 10
+
     def act(self) -> bool:
-        cube = randint(1, 2)
+        cube = randint(1, 6)
         if self.fullness == 10:
             self.eat()
             cprint(f'{self.name} поел', color='green')
         elif self.happiness <= 20:
             self.gaming()
             cprint(f'{self.name} играл в компьютер', color='yellow')
+        elif self.house.cat_food <= 20:
+            self.buy_cat_food()
+            cprint(f'{self.name} купил еды для кота', color='blue')
         elif self.house.money <= 50:
             self.work()
             cprint(f'{self.name} сходил на работу', color='grey')
         elif cube == 1:
             self.work()
             cprint(f'{self.name} сходил на работу', color='grey')
+        elif cube == 3:
+            self.buy_cat_food()
+            cprint(f'{self.name} купил еды для кота', color='blue')
+        elif cube == 2:
+            self.pet_a_cat()
+            cprint(f'{self.name} гладил кота', color='yellow')
+        elif cube == 5:
+            self.eat()
+            cprint(f'{self.name} поел', color='green')
         else:
             self.gaming()
             cprint(f'{self.name} играл в компьютер', color='yellow')
@@ -120,11 +148,12 @@ class Husband(Human):
 
 
 class Wife(Human):
+    total_fur_coat = 0
 
     def __str__(self):
         return super().__str__()
 
-    def shopping(self):
+    def shopping(self) -> None:
         if self.house.money >= 200:
             self.house.money -= 200
             self.house.food += 200
@@ -133,13 +162,14 @@ class Wife(Human):
             self.house.money = 0
         self.fullness -= 10
 
-    def buy_fur_coat(self):
+    def buy_fur_coat(self) -> None:
         if self.house.money >= 350:
             self.house.money -= 350
             self.happiness += 60
             self.fullness -= 10
+            self.total_fur_coat += 1
 
-    def clean_house(self):
+    def clean_house(self) -> None:
         if self.house.dirt >= 100:
             self.house.dirt -= 100
         else:
@@ -148,7 +178,7 @@ class Wife(Human):
         self.happiness -= 10
 
     def act(self) -> bool:
-        cube = randint(1, 3)
+        cube = randint(1, 6)
         if self.fullness == 10:
             self.eat()
             cprint(f'{self.name} поела', color='green')
@@ -158,7 +188,7 @@ class Wife(Human):
         elif self.happiness <= 20:
             self.buy_fur_coat()
             cprint(f'{self.name} купила себе шубу', color='yellow')
-        elif self.house.dirt <= 20:
+        elif self.house.dirt >= 70:
             self.clean_house()
             cprint(f'{self.name} убиралась в доме', color='grey')
         elif cube == 1:
@@ -170,35 +200,38 @@ class Wife(Human):
         elif cube == 3:
             self.buy_fur_coat()
             cprint(f'{self.name} купила себе шубу', color='yellow')
-        else:
+        elif cube == 5:
             self.clean_house()
             cprint(f'{self.name} убиралась в доме', color='grey')
+        else:
+            self.pet_a_cat()
+            cprint(f'{self.name} гладила кота', color='yellow')
         if self.house.dirt > 90:
             self.happiness -= 10
         if self.fullness < 0:
-            cprint(f'{self.name} умер от голода, вы проиграли', color='red')
+            cprint(f'{self.name} умерла от голода, вы проиграли', color='red')
             return True
         elif self.happiness < 10:
-            cprint(f'{self.name} умер от депрессии, вы проиграли', color='red')
+            cprint(f'{self.name} умерла от депрессии, вы проиграли', color='red')
             return True
         else:
             return False
 
 
-if __name__ == '__main__':
-    home = House()
-    danilka = Husband(name='Данилка', house=home)
-    gulnaz = Wife(name='Гульназ', house=home)
-
-    for day in range(1, 366):
-        cprint(f'================== День {day} ==================', color='red')
-        if danilka.act():
-            break
-        if gulnaz.act():
-            break
-        cprint(danilka, color='cyan')
-        cprint(gulnaz, color='cyan')
-        cprint(home, color='cyan')
+# if __name__ == '__main__':
+#     home = House()
+#     danilka = Husband(name='Данилка', house=home)
+#     gulnaz = Wife(name='Гульназ', house=home)
+#
+#     for day in range(1, 366):
+#         cprint(f'================== День {day} ==================', color='red')
+#         if danilka.act():
+#             break
+#         if gulnaz.act():
+#             break
+#         cprint(danilka, color='cyan')
+#         cprint(gulnaz, color='cyan')
+#         cprint(home, color='cyan')
 
 ######################################################## Часть вторая
 #
@@ -227,21 +260,69 @@ if __name__ == '__main__':
 
 class Cat:
 
-    def __init__(self):
-        pass
+    def __init__(self, name: str, house: House):
+        self.name = name
+        self.house = house
+        self.fullness = 30
 
-    def act(self):
-        pass
+    def __str__(self):
+        return f'Я {self.name}, сытость - {self.fullness}'
 
-    def eat(self):
-        pass
+    def eat(self) -> None:
+        if self.house.food >= 10:
+            self.house.food -= 10
+            self.fullness += 20
+        else:
+            self.fullness -= 10
 
-    def sleep(self):
-        pass
+    def sleep(self) -> None:
+        self.fullness -= 10
 
-    def soil(self):
-        pass
+    def tear_wallpaper(self) -> None:
+        self.house.dirt += 5
+        self.fullness -= 10
 
+    def act(self) -> bool:
+        cube = randint(1, 5)
+        if self.fullness >= 10:
+            self.eat()
+            cprint(f'{self.name} поел', color='green')
+        elif cube in (1, 4):
+            self.tear_wallpaper()
+            cprint(f'{self.name} драл обои', color='blue')
+        elif cube == 3:
+            self.eat()
+            cprint(f'{self.name} поел', color='green')
+        else:
+            self.sleep()
+            cprint(f'{self.name} проспал весь день', color='green')
+        if self.fullness <= 0:
+            cprint(f'{self.name} умер от голода, вы проиграли', color='red')
+            return True
+        else:
+            return False
+
+
+if __name__ == '__main__':
+    home = House()
+    danilka = Husband(name='Данилка', house=home)
+    gulnaz = Wife(name='Гульназ', house=home)
+    murzic = Cat(name='Мурзик', house=home)
+
+    for day in range(1, 366):
+        cprint(f'================== День {day} ==================', color='red')
+        if danilka.act():
+            break
+        if gulnaz.act():
+            break
+        if murzic.act():
+            break
+        cprint(danilka, color='cyan')
+        cprint(gulnaz, color='cyan')
+        cprint(murzic, color='cyan')
+        cprint(home, color='cyan')
+    cprint(f'За год съедено еды - {House.total_food}, заработано денег - {House.total_money}, куплено шуб - '
+           f'{Wife.total_fur_coat}', color='magenta')
 
 ######################################################## Часть вторая бис
 #
