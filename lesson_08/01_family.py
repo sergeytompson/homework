@@ -122,7 +122,7 @@ class Husband(Human):
 
     def act(self) -> bool:
         cube = randint(1, 6)
-        if self.fullness == 10:
+        if self.fullness <= 10:
             self.eat()
         elif self.happiness <= 20:
             self.gaming()
@@ -195,7 +195,7 @@ class Wife(Human):
 
     def act(self) -> bool:
         cube = randint(1, 6)
-        if self.fullness == 10:
+        if self.fullness <= 10:
             self.eat()
         elif self.house.food <= 30:
             self.shopping()
@@ -341,7 +341,7 @@ class Cat:
 # отличия от взрослых - кушает максимум 10 единиц еды,
 # степень счастья  - не меняется, всегда ==100 ;)
 
-class Child:
+class Child(Human):
 
     def __str__(self) -> str:
         return super().__str__()
@@ -386,6 +386,7 @@ if __name__ == '__main__':
     danilka = Husband(name='Данилка', house=home)
     gulnaz = Wife(name='Гульназ', house=home)
     francheska = Child(name='Франчкска', house=home)
+    murzic = Cat(name='мурзик', house=home)
 
     for day in range(1, 366):
         cprint(f'================== День {day} ==================', color='red')
@@ -395,10 +396,15 @@ if __name__ == '__main__':
             break
         if francheska.act():
             break
+        if murzic.act():
+            break
         cprint(danilka, color='cyan')
         cprint(gulnaz, color='cyan')
         cprint(francheska, color='cyan')
+        cprint(murzic, color='cyan')
         cprint(home, color='cyan')
+    cprint(f'За год съедено еды - {House.total_food}, заработано денег - {House.total_money}, куплено шуб - '
+           f'{gulnaz.total_fur_coat}', color='magenta')
 
 
 # Усложненное задание (делать по желанию)
