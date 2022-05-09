@@ -98,10 +98,6 @@ class Husband(Human):
         self.priorities = [0, 0, 0, 0]
         self.actions = [self.pet_a_cat, self.gaming, self.buy_cat_food, self.eat, self.work]
 
-    # TODO можно не использовать super в данном случае, ведь __str__ от родительского класса никак не меняется
-    def __str__(self) -> str:
-        return super().__str__()
-
     def eat(self) -> None:
         if super().eat():
             cprint(f'{self.name} поел', color='green')
@@ -169,10 +165,6 @@ class Wife(Human):
         self.husband = None
         self.priorities = [0, 0, 0, 0]
         self.actions = [self.pet_a_cat, self.buy_fur_coat, self.clean_house, self.eat, self.shopping]
-
-    # TODO можно не использовать super в данном случае, ведь __str__ от родительского класса никак не меняется
-    def __str__(self) -> str:
-        return super().__str__()
 
     def eat(self) -> None:
         if super().eat():
@@ -425,31 +417,16 @@ if __name__ == '__main__':
     gulnaz.husband = danilka
     francheska.mother = gulnaz
     murzic.owner = danilka
+    family = [danilka, gulnaz, francheska, murzic]
 
     for day in range(1, 366):
         cprint(f'================== День {day} ==================', color='red')
-        # TODO можно очень существенно сократить
-        """
-        family = [danilka, gulnaz, francheska, murzic]
         for member in family:
             if member.act():
                 break
         for member in family:
             cprint(member, color='cyan')
-        """
-        if danilka.act():
-            break
-        if gulnaz.act():
-            break
-        if francheska.act():
-            break
-        if murzic.act():
-            break
-        cprint(danilka, color='cyan')
-        cprint(gulnaz, color='cyan')
-        cprint(francheska, color='cyan')
-        cprint(murzic, color='cyan')
-        cprint(home, color='cyan')
+
     cprint(f'За год съедено еды - {House.total_food}, заработано денег - {House.total_money}, куплено шуб - '
            f'{gulnaz.total_fur_coat}', color='magenta')
 
