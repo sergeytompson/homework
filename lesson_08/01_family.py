@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from termcolor import cprint
-from random import randint
+from random import choice, randint
 
 ######################################################## Часть первая
 #
@@ -92,12 +92,22 @@ class Human:
 
 class Husband(Human):
 
+    def __init__(self, name: str, house: House):
+        super().__init__(name=name, house=house)
+        self.wife = None
+        self.priorities = [0, 0, 0, 0]
+        self.actions = [self.pet_a_cat, self.gaming, self.buy_cat_food, self.eat, self.work]
+
     def __str__(self) -> str:
         return super().__str__()
 
     def eat(self) -> None:
         if super().eat():
             cprint(f'{self.name} поел', color='green')
+            self.priorities[2] = 0
+        else:
+            self.wife.priorities[3] = 4
+            cprint(f'{self.name} попросил {self.wife.name} купить еды', color='red')
 
     def work(self) -> None:
         self.fullness -= 10
@@ -105,11 +115,13 @@ class Husband(Human):
         self.house.money += 150
         House.total_money += 150
         cprint(f'{self.name} сходил на работу', color='grey')
+        self.priorities[3] = 0
 
     def gaming(self) -> None:
         self.happiness += 20
         self.fullness -= 10
         cprint(f'{self.name} играл в компьютер', color='yellow')
+        self.priorities[0] = 0
 
     def buy_cat_food(self) -> None:
         if self.house.money >= 30:
@@ -117,29 +129,25 @@ class Husband(Human):
             self.house.cat_food += 30
             self.fullness -= 10
             cprint(f'{self.name} купил еды для кота', color='blue')
+            self.priorities[1] = 0
         else:
-            cprint('На кошачью еду не хватило денег', color='red')
+            cprint(f'На кошачью еду не хватило денег. {self.name[:-1]}e нужно поработать', color='red')
+            self.priorities[3] = 4
+
+    def check_priorities(self):
+        if self.fullness <= 30:
+            self.priorities[2] = 3
+        if self.happiness <= 40:
+            self.priorities[0] = 1
+        return max(self.priorities)
 
     def act(self) -> bool:
-        cube = randint(1, 6)
-        if self.fullness <= 10:
-            self.eat()
-        elif self.happiness <= 20:
-            self.gaming()
-        elif self.house.cat_food <= 20:
-            self.buy_cat_food()
-        elif self.house.money <= 50:
-            self.work()
-        elif cube == 1:
-            self.work()
-        elif cube == 3:
-            self.buy_cat_food()
-        elif cube == 2:
-            self.pet_a_cat()
-        elif cube == 5:
-            self.eat()
+        priority = self.check_priorities()
+        if priority == 0:
+            action = choice(self.actions)
+            action()
         else:
-            self.gaming()
+            self.actions[priority]()
         if self.house.dirt > 90:
             self.happiness -= 10
         if self.fullness < 0:
@@ -155,24 +163,39 @@ class Husband(Human):
 class Wife(Human):
     total_fur_coat = 0
 
+    def __init__(self, name: str, house: House):
+        super().__init__(name=name, house=house)
+        self.husband = None
+        self.priorities = [0, 0, 0, 0]
+        self.actions = [self.pet_a_cat, self.buy_fur_coat, self.clean_house, self.eat, self.shopping]
+
     def __str__(self) -> str:
         return super().__str__()
 
     def eat(self) -> None:
         if super().eat():
             cprint(f'{self.name} поела', color='green')
+            self.priorities[2] = 0
+        else:
+            self.priorities[3] = 4
+            cprint(f'{self.name} нужно купить еды')
 
     def shopping(self) -> None:
         if self.house.money >= 200:
             self.house.money -= 200
             self.house.food += 200
+            cprint(f'{self.name} забила холодильник едой', color='green')
+            self.priorities[3] = 0
         elif self.house.money == 0:
             cprint('Нет денег на еду', color='red')
+            self.husband.priorities[3] = 4
+            cprint(f'{self.name} отпиздила {self.husband.name[:-1]}у за то, что он мало зарабатывает', color='red')
         else:
             self.house.food = self.house.money
             self.house.money = 0
+            cprint(f'{self.name} купила немного еды', color='green')
+            self.priorities[3] = 0
         self.fullness -= 10
-        cprint(f'{self.name} сходила в магазин', color='green')
 
     def buy_fur_coat(self) -> None:
         if self.house.money >= 350:
@@ -181,38 +204,38 @@ class Wife(Human):
             self.fullness -= 10
             self.total_fur_coat += 1
             cprint(f'{self.name} купила себе шубу', color='yellow')
+            self.priorities[0] = 0
         else:
             cprint('На шубу не хватило денег', color='red')
+            self.husband.priorities[3] = 4
+            cprint(f'{self.name} отпиздила {self.husband.name[:-1]}у за то, что он мало зарабатывает', color='red')
 
     def clean_house(self) -> None:
         if self.house.dirt >= 100:
             self.house.dirt -= 100
         else:
             self.house.dirt = 0
+        self.priorities[1] = 0
         self.fullness -= 10
         self.happiness -= 10
         cprint(f'{self.name} убиралась в доме', color='grey')
 
+    def check_priorities(self):
+        if self.fullness <= 40:
+            self.priorities[2] = 3
+        if self.happiness <= 40:
+            self.priorities[0] = 1
+        if self.house.dirt >= 70:
+            self.priorities[1] = 2
+        return max(self.priorities)
+
     def act(self) -> bool:
-        cube = randint(1, 6)
-        if self.fullness <= 10:
-            self.eat()
-        elif self.house.food <= 30:
-            self.shopping()
-        elif self.happiness <= 20:
-            self.buy_fur_coat()
-        elif self.house.dirt >= 70:
-            self.clean_house()
-        elif cube == 1:
-            self.eat()
-        elif cube == 2:
-            self.shopping()
-        elif cube in (3, 6):
-            self.buy_fur_coat()
-        elif cube == 5:
-            self.clean_house()
+        priority = self.check_priorities()
+        if priority == 0:
+            action = choice(self.actions)
+            action()
         else:
-            self.pet_a_cat()
+            self.actions[priority]()
         if self.house.dirt > 90:
             self.happiness -= 10
         if self.fullness < 0:
@@ -271,18 +294,21 @@ class Cat:
         self.name = name
         self.house = house
         self.fullness = 30
+        self.owner = None
 
     def __str__(self):
         return f'Я {self.name}, сытость - {self.fullness}'
 
     def eat(self) -> None:
-        if self.house.food >= 10:
-            self.house.food -= 10
+        if self.house.cat_food >= 10:
+            self.house.cat_food -= 10
             self.fullness += 20
             cprint(f'{self.name} поел', color='green')
         else:
             self.fullness -= 10
-            cprint('В доме нет кошачьей еды')
+            cprint('В доме нет кошачьей еды', color='red')
+            self.owner.priorities[1] = 2
+            cprint(f'{self.name} насрал {self.owner.name[:-1]}е в тапки, чтобы тот купил кошачьей еды', color='red')
 
     def sleep(self) -> None:
         self.fullness -= 10
@@ -343,6 +369,10 @@ class Cat:
 
 class Child(Human):
 
+    def __init__(self, name: str, house: House):
+        super().__init__(name=name, house=house)
+        self.mother = None
+
     def __str__(self) -> str:
         return super().__str__()
 
@@ -350,6 +380,8 @@ class Child(Human):
         if self.house.food == 0:
             self.fullness -= 10
             cprint('В доме нет еды', color='red')
+            self.mother.priorities[3] = 4
+            cprint(f'{self.name} плакала весь день, чтобы {self.mother.name} купила еды')
         else:
             self.fullness += 10
             self.house.food -= 10
@@ -387,6 +419,10 @@ if __name__ == '__main__':
     gulnaz = Wife(name='Гульназ', house=home)
     francheska = Child(name='Франчкска', house=home)
     murzic = Cat(name='мурзик', house=home)
+    danilka.wife = gulnaz
+    gulnaz.husband = danilka
+    francheska.mother = gulnaz
+    murzic.owner = danilka
 
     for day in range(1, 366):
         cprint(f'================== День {day} ==================', color='red')
