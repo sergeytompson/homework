@@ -3,6 +3,7 @@
 from termcolor import cprint
 from random import choice, randint
 
+
 ######################################################## Часть первая
 #
 # Создать модель жизни небольшой семьи.
@@ -43,7 +44,6 @@ from random import choice, randint
 
 
 class House:
-
     total_money = 0
     total_food = 0
 
@@ -98,6 +98,7 @@ class Husband(Human):
         self.priorities = [0, 0, 0, 0]
         self.actions = [self.pet_a_cat, self.gaming, self.buy_cat_food, self.eat, self.work]
 
+    # TODO можно не использовать super в данном случае, ведь __str__ от родительского класса никак не меняется
     def __str__(self) -> str:
         return super().__str__()
 
@@ -169,6 +170,7 @@ class Wife(Human):
         self.priorities = [0, 0, 0, 0]
         self.actions = [self.pet_a_cat, self.buy_fur_coat, self.clean_house, self.eat, self.shopping]
 
+    # TODO можно не использовать super в данном случае, ведь __str__ от родительского класса никак не меняется
     def __str__(self) -> str:
         return super().__str__()
 
@@ -365,7 +367,7 @@ class Cat:
 #   спать,
 #
 # отличия от взрослых - кушает максимум 10 единиц еды,
-# степень счастья  - не меняется, всегда ==100 ;)
+# степень счастья - не меняется, всегда ==100 ;)
 
 class Child(Human):
 
@@ -426,6 +428,15 @@ if __name__ == '__main__':
 
     for day in range(1, 366):
         cprint(f'================== День {day} ==================', color='red')
+        # TODO можно очень существенно сократить
+        """
+        family = [danilka, gulnaz, francheska, murzic]
+        for member in family:
+            if member.act():
+                break
+        for member in family:
+            cprint(member, color='cyan')
+        """
         if danilka.act():
             break
         if gulnaz.act():
@@ -441,7 +452,6 @@ if __name__ == '__main__':
         cprint(home, color='cyan')
     cprint(f'За год съедено еды - {House.total_food}, заработано денег - {House.total_money}, куплено шуб - '
            f'{gulnaz.total_fur_coat}', color='magenta')
-
 
 # Усложненное задание (делать по желанию)
 #
