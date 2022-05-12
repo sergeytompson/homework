@@ -21,6 +21,7 @@
 from abc import ABCMeta, abstractmethod
 
 
+# TODO Абстрактные методы принято называть Abstract{имя класса} - AbstractStatistician
 class LogParser(metaclass=ABCMeta):
 
     def __init__(self, file_in: str, file_out: str) -> None:
@@ -45,6 +46,8 @@ class LogParser(metaclass=ABCMeta):
     def _write(self):
         with open(self.file_out, 'w') as file_out:
             for time, count in self.time_dict.items():
+
+                # TODO f-strings?
                 count = str(count)
                 file_out.write(time + ' ' + count + '\n')
 
@@ -52,6 +55,7 @@ class LogParser(metaclass=ABCMeta):
 class SorterByMinutes(LogParser):
 
     def _get_stat(self, line: str) -> None:
+        # TODO здесь 17 - это явно отличительная черта класса
         time = line[:17] + ']'
         if time in self.time_dict:
             self.time_dict[time] += 1
@@ -62,6 +66,7 @@ class SorterByMinutes(LogParser):
 class SorterByHour(LogParser):
 
     def _get_stat(self, line: str) -> None:
+        # TODO здесь 14 - это явно отличительная черта класса
         time = line[:14] + ']'
         if time in self.time_dict:
             self.time_dict[time] += 1
@@ -72,6 +77,7 @@ class SorterByHour(LogParser):
 class SorterByMonth(LogParser):
 
     def _get_stat(self, line: str) -> None:
+        # TODO здесь 18 - это явно отличительная черта класса
         time = line[:8] + ']'
         if time in self.time_dict:
             self.time_dict[time] += 1
@@ -82,11 +88,21 @@ class SorterByMonth(LogParser):
 class SorterByYears(LogParser):
 
     def _get_stat(self, line: str) -> None:
+        # TODO здесь 5 - это явно отличительная черта класса
         time = line[:5] + ']'
         if time in self.time_dict:
             self.time_dict[time] += 1
         else:
             self.time_dict[time] = 1
+
+
+# TODO ловушка паттерн ради паттерна :)
+#  использованием шаблона ты нарушаешь DRY (https://ru.wikipedia.org/wiki/Don’t_repeat_yourself)
+#  _get_stat везде один и тот же за исключением индекса
+#  в данном случае нужно сделать такую модель наследования:
+#  AbstractLogParser (абстрактный класс, где все методы абстрактны) ->
+#  -> LogParser (класс с базовой логикой) ->
+#  -> (SorterByMinutes, SorterByHour,SorterByMonth, SorterByYears, )
 
 
 if __name__ == '__main__':

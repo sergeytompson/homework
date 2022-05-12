@@ -24,6 +24,7 @@ import zipfile
 from abc import ABCMeta, abstractmethod
 
 
+# TODO Абстрактные методы принято называть Abstract{имя класса} - AbstractStatistician
 class Statistician(metaclass=ABCMeta):
 
     def __init__(self, file: str, ascending: bool = False) -> None:
@@ -47,7 +48,8 @@ class Statistician(metaclass=ABCMeta):
     def _read_lines(self) -> None:
         if self.file.endswith('.zip'):
             self._unzip()
-        with open(self.file, 'r') as file:
+        # TODO cp1251 - кодировка windows, без явного указания на линуксе падает с ошибкой, в линукс по умолчанию utf-8
+        with open(self.file, 'r', encoding='cp1251') as file:
             for line in file:
                 line = line.strip()
                 self._collect_stat(line)
@@ -83,8 +85,30 @@ class Statistician(metaclass=ABCMeta):
 class SortByPeriodicity(Statistician):
 
     def _sort(self):
+        # TODO обрати внимание на чудесную функцию sorted
+        #  https://tproger.ru/translations/python-sorting/
+        #  для сортировки по символам или их частоте потребуется поменять лишь один параметр в классе
+        #  для этого используй переменные класса
+        """
+        Отличия переменных класса от переменных экземпляра:
+
+          class MainClass:
+             variable1 = 0  # Это переменная класса
+
+              def __init__():
+                   variable2 = 1  #  Это переменная экземпляра.
+        """
+
+        """
+        sorted(
+            [(char, counts) for char, counts in self.stat.items()],
+            key=operator.itemgetter(здесь индекс по чему хочешь сортировать из (char, counts)),
+            reverse={bool}
+        )
+        """
         for char, count in self.stat.items():
             self.sort_stat.append([count, char])
+            # TODO self.ascending же булева, зачем проверка, если ее можно подставить в reverse?
             if self.ascending:
                 self.sort_stat.sort()
             else:
@@ -110,7 +134,6 @@ if __name__ == '__main__':
     voyna_i_mir.give_stat()
     voyna_i_mir = SortByAlphabet('voyna-i-mir.txt.zip', ascending=True)
     voyna_i_mir.give_stat()
-
 # После выполнения первого этапа нужно сделать упорядочивание статистики
 #  - по частоте по возрастанию
 #  - по алфавиту по возрастанию
