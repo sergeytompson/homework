@@ -23,11 +23,17 @@ from abc import ABCMeta, abstractmethod
 
 class AbstractLogParser(metaclass=ABCMeta):
 
+    segment = None
+
     def __init__(self, file_in: str, file_out: str) -> None:
         self.file_in = file_in
         self.file_out = file_out
         self.time_dict = {}
-        self.segment = None
+
+    @abstractmethod
+    def read_and_write(self) -> None:
+        self._read()
+        self._write()
 
     @abstractmethod
     def _read(self) -> None:
@@ -70,30 +76,22 @@ class LogParser(AbstractLogParser):
 
 class SorterByMinutes(LogParser):
 
-    def __init__(self, file_in: str, file_out: str):
-        super().__init__(file_in=file_in, file_out=file_out)
-        self.segment = 17
+    segment = 17
 
 
 class SorterByHour(LogParser):
 
-    def __init__(self, file_in: str, file_out: str):
-        super().__init__(file_in=file_in, file_out=file_out)
-        self.segment = 14
+    segment = 14
 
 
 class SorterByMonth(LogParser):
 
-    def __init__(self, file_in: str, file_out: str):
-        super().__init__(file_in=file_in, file_out=file_out)
-        self.segment = 8
+    segment = 8
 
 
 class SorterByYears(LogParser):
 
-    def __init__(self, file_in: str, file_out: str):
-        super().__init__(file_in=file_in, file_out=file_out)
-        self.segment = 5
+    segment = 5
 
 
 if __name__ == '__main__':

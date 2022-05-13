@@ -22,13 +22,12 @@
 # Требования к коду: он должен быть готовым к расширению функциональности. Делать сразу на классах.
 import operator
 import zipfile
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 from sys import platform
 
 
 class AbstractStatistician(metaclass=ABCMeta):
-    sort_by_periodicity: int = 1
-    sort_by_alphabet: int = 0
+    sort_index = None
 
     def __init__(self, file: str, revers: bool = False) -> None:
         self.file = file
@@ -68,9 +67,9 @@ class AbstractStatistician(metaclass=ABCMeta):
                 else:
                     self.stat[char] = 1
 
-    @abstractmethod
     def _sort(self):
-        pass
+        self.sort_stat = sorted([(char, counts) for char, counts in self.stat.items()],
+                                key=operator.itemgetter(self.sort_index), reverse=self.revers)
 
     def _print_sort_stat(self) -> None:
         print('+{plus:-^21}+'.format(plus='+'))
@@ -90,16 +89,12 @@ class AbstractStatistician(metaclass=ABCMeta):
 
 class SortByPeriodicity(AbstractStatistician):
 
-    def _sort(self):
-        self.sort_stat = sorted([(char, counts) for char, counts in self.stat.items()],
-                                key=operator.itemgetter(AbstractStatistician.sort_by_periodicity), reverse=self.revers)
+    sort_index = 1
 
 
 class SortByAlphabet(AbstractStatistician):
 
-    def _sort(self):
-        self.sort_stat = sorted([(char, counts) for char, counts in self.stat.items()],
-                                key=operator.itemgetter(AbstractStatistician.sort_by_alphabet), reverse=self.revers)
+    sort_index = 0
 
 
 if __name__ == '__main__':
