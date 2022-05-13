@@ -5,6 +5,7 @@ import shutil
 import time
 import zipfile
 import pathlib
+from abc import ABCMeta, abstractmethod
 
 # Нужно написать скрипт для упорядочивания фотографий (вообще любых файлов)
 # Скрипт должен разложить файлы из одной папки по годам и месяцам в другую.
@@ -39,8 +40,7 @@ import pathlib
 # Требования к коду: он должен быть готовым к расширению функциональности. Делать сразу на классах.
 
 
-# TODO абстрактный класс
-class FileSort:
+class FileSort(metaclass=ABCMeta):
 
     def __init__(self, folder_in: str, folder_out: str):
         self.folder_in = folder_in
@@ -54,7 +54,7 @@ class FileSort:
                 os.utime(zi.filename, (date_time, date_time))
         self.folder_in = self.folder_in[:-4]
 
-    # TODO абстрактный метод
+    @abstractmethod
     def sort_by_month(self) -> None:
         pass
 
@@ -68,16 +68,8 @@ class SortFromFolder(FileSort):
             for file in filenames:
                 file_name = os.path.join(dir_path, file)
                 sec = os.path.getmtime(file_name)
-                # TODO уже можно понтоваться :)
-                #  просто на заметку:
-                #  https://tproger.ru/translations/asterisks-in-python-what-they-are-and-how-to-use-them/
-                #  year, month, *_ = map(str, time.gmtime(sec))
-                creation_time = time.gmtime(sec)
-                year = str(creation_time[0])
-                month = str(creation_time[1])
-                # TODO  month = '0' + month if len(month) == 1 else month - кратко и красиво
-                if len(month) == 1:
-                    month = '0' + month
+                year, month, *_ = map(str, time.gmtime(sec))
+                month = '0' + month if len(month) == 1 else month
                 file_direct = os.path.join(self.folder_out, year, month)
                 pathlib.Path(file_direct).mkdir(parents=True, exist_ok=True)
                 shutil.copy2(file_name, file_direct)
@@ -91,29 +83,12 @@ class SortFromZip(FileSort):
                 if not zi.filename.endswith('/'):
                     year = str(zi.date_time[0])
                     month = str(zi.date_time[1])
-                    if len(month) == 1:
-                        month = '0' + month
+                    month = '0' + month if len(month) == 1 else month
                     file_direct = os.path.join(self.folder_out, year, month)
                     pathlib.Path(file_direct).mkdir(parents=True, exist_ok=True)
-                    # TODO filename у zipinfo можно поменять на лету
-                    #  тогда вторая итерация os.walk'ом будет просто не нужна
+                    filename_list = zi.filename.split('/')
+                    zi.filename = filename_list[-1]
                     zf.extract(zi, file_direct)
-
-        # TODO можно убрать этот блок
-        for dir_path, dir_names, filenames in os.walk(self.folder_out):
-            for file in filenames:
-                # TODO обрати внимание на os.path.normpath - поможет сделать работу с путями корректной на разных СС
-                file_dir = os.path.join(dir_path, file)
-                # TODO пути у разных ОС отличаются, получить актуальный разделитель можно так: os.sep
-                dir_lst = dir_path.split('\\')
-                while not len(dir_lst[-1]) == 2 and not dir_lst[-1].isdigit():
-                    dir_lst.pop()
-                month_dir = os.path.join(*dir_lst)
-                # TODO shutil упадет, если такой путь уже существует
-                shutil.move(file_dir, month_dir)
-        for dir_path, dir_names, filenames in os.walk(self.folder_out):
-            if not dir_names and not filenames:
-                os.removedirs(dir_path)
 
 
 '''проверка первой части'''

@@ -20,16 +20,19 @@
 #
 # Упорядочивание по частоте - по убыванию. Ширину таблицы подберите по своему вкусу
 # Требования к коду: он должен быть готовым к расширению функциональности. Делать сразу на классах.
+import operator
 import zipfile
 from abc import ABCMeta, abstractmethod
+from sys import platform
 
 
-# TODO Абстрактные методы принято называть Abstract{имя класса} - AbstractStatistician
-class Statistician(metaclass=ABCMeta):
+class AbstractStatistician(metaclass=ABCMeta):
+    sort_by_periodicity: int = 1
+    sort_by_alphabet: int = 0
 
-    def __init__(self, file: str, ascending: bool = False) -> None:
+    def __init__(self, file: str, revers: bool = False) -> None:
         self.file = file
-        self.ascending = ascending
+        self.revers = revers
         self.stat = {}
         self.sort_stat = []
 
@@ -48,8 +51,11 @@ class Statistician(metaclass=ABCMeta):
     def _read_lines(self) -> None:
         if self.file.endswith('.zip'):
             self._unzip()
-        # TODO cp1251 - кодировка windows, без явного указания на линуксе падает с ошибкой, в линукс по умолчанию utf-8
-        with open(self.file, 'r', encoding='cp1251') as file:
+        if platform == 'win32':
+            encoding = 'cp1251'
+        else:
+            encoding = 'utf8'
+        with open(self.file, 'r', encoding=encoding) as file:
             for line in file:
                 line = line.strip()
                 self._collect_stat(line)
@@ -82,57 +88,28 @@ class Statistician(metaclass=ABCMeta):
         print('+{plus:-^21}+'.format(plus='+'))
 
 
-class SortByPeriodicity(Statistician):
+class SortByPeriodicity(AbstractStatistician):
 
     def _sort(self):
-        # TODO обрати внимание на чудесную функцию sorted
-        #  https://tproger.ru/translations/python-sorting/
-        #  для сортировки по символам или их частоте потребуется поменять лишь один параметр в классе
-        #  для этого используй переменные класса
-        """
-        Отличия переменных класса от переменных экземпляра:
-
-          class MainClass:
-             variable1 = 0  # Это переменная класса
-
-              def __init__():
-                   variable2 = 1  #  Это переменная экземпляра.
-        """
-
-        """
-        sorted(
-            [(char, counts) for char, counts in self.stat.items()],
-            key=operator.itemgetter(здесь индекс по чему хочешь сортировать из (char, counts)),
-            reverse={bool}
-        )
-        """
-        for char, count in self.stat.items():
-            self.sort_stat.append([count, char])
-            # TODO self.ascending же булева, зачем проверка, если ее можно подставить в reverse?
-            if self.ascending:
-                self.sort_stat.sort()
-            else:
-                self.sort_stat.sort(reverse=True)
-        for value in self.sort_stat:
-            value[0], value[1] = value[1], value[0]
+        self.sort_stat = sorted([(char, counts) for char, counts in self.stat.items()],
+                                key=operator.itemgetter(AbstractStatistician.sort_by_periodicity), reverse=self.revers)
 
 
-class SortByAlphabet(Statistician):
+class SortByAlphabet(AbstractStatistician):
 
     def _sort(self):
-        for char, count in self.stat.items():
-            self.sort_stat.append([char, count])
-            self.sort_stat.sort(reverse=self.ascending)
+        self.sort_stat = sorted([(char, counts) for char, counts in self.stat.items()],
+                                key=operator.itemgetter(AbstractStatistician.sort_by_alphabet), reverse=self.revers)
 
 
 if __name__ == '__main__':
     voyna_i_mir = SortByPeriodicity('voyna-i-mir.txt.zip')
     voyna_i_mir.give_stat()
-    voyna_i_mir = SortByPeriodicity('voyna-i-mir.txt.zip', ascending=True)
+    voyna_i_mir = SortByPeriodicity('voyna-i-mir.txt.zip', revers=True)
     voyna_i_mir.give_stat()
     voyna_i_mir = SortByAlphabet('voyna-i-mir.txt.zip')
     voyna_i_mir.give_stat()
-    voyna_i_mir = SortByAlphabet('voyna-i-mir.txt.zip', ascending=True)
+    voyna_i_mir = SortByAlphabet('voyna-i-mir.txt.zip', revers=True)
     voyna_i_mir.give_stat()
 # После выполнения первого этапа нужно сделать упорядочивание статистики
 #  - по частоте по возрастанию
