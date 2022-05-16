@@ -75,8 +75,8 @@ if __name__ == '__main__':
     murray_carma = 0
     hero = 'Билл Мюррей'
     day = 1
-    i_am_good_total, drunk_total, car_crash_total, gluttony_total, depression_total, suicide_total = 0, 0, 0, 0, 0, 0
     errors = [IamGodError, DrunkError, CarCrashError, GluttonyError, DepressionError, SuicideError]
+    errors_total = {}
     while murray_carma < ENLIGHTENMENT_CARMA_LEVEL:
         cprint(f'================== День {day} ==================', color='yellow')
         try:
@@ -85,26 +85,17 @@ if __name__ == '__main__':
             incident = str(exc)
             what_happened_to_billy = hero + ' ' + incident
             cprint(what_happened_to_billy, color='red')
-            if incident == 'считал себя богом':
-                i_am_good_total += 1
-            elif incident == 'напился':
-                drunk_total += 1
-            elif incident == 'попал в аварию':
-                car_crash_total += 1
-            elif incident == 'обжирался':
-                gluttony_total += 1
-            elif incident == 'впал в депрессию':
-                depression_total += 1
-            elif incident == 'покончил жизнь самоубийством':
-                suicide_total += 1
+            if incident in errors_total:
+                errors_total[incident] += 1
+            else:
+                errors_total[incident] = 1
         else:
             cprint(f'{hero} стал чуточку лучше, его карма достигла {murray_carma}', color='green')
         finally:
             day += 1
     cprint(f'{hero} достиг просветления и сумел выбраться из дня сурка, проведя там {day} дней. За это время он:',
            color='blue')
-    errors_total = [i_am_good_total, drunk_total, car_crash_total, gluttony_total, depression_total, suicide_total]
-    for error, total in zip(errors, errors_total):
-        cprint(f'    {error()} {total} {"раза" if 1 < total < 5 else "раз"}', color='blue')
+    for error, total in errors_total.items():
+        cprint(f'    {error} {total} {"раза" if 1 < total < 5 else "раз"}', color='blue')
 
 # https://goo.gl/JnsDqu
