@@ -24,7 +24,8 @@ ENLIGHTENMENT_CARMA_LEVEL = 777
 
 
 class IamGodError(Exception):
-
+    # TODO исключение отвечает за уведомление об ошибке, статистикой обычно занимается отдельный функционал
+    #  если хочешь копить статистику, то это нужно делать в основном цикле, а не в исключении
     total: int = 0
 
     def __str__(self) -> str:
@@ -82,12 +83,23 @@ def one_day(possible_errors: list) -> int:
 if __name__ == '__main__':
     murray_carma = 0
     day = 1
+    # TODO хранить нужно объекты, а не вызов объектов
     errors = [IamGodError(), DrunkError(), CarCrashError(), GluttonyError(), DepressionError(), SuicideError()]
     while murray_carma < ENLIGHTENMENT_CARMA_LEVEL:
         cprint(f'================== День {day} ==================', color='yellow')
         try:
             murray_carma += one_day(errors)
+        # TODO - 6 эксепшн блоков! допускается использование нескольких эксепш блоков если в зависимости от типа
+        #  ошибки как то меняется логика или поведение, в данном случе идет просто распечатка сообщения
+        #  сделай общего родителя для этих ошибок и делай except по нему
         except IamGodError:
+            # TODO обрати внимание на конструкцию:
+            """
+            except IamGodError as exc:
+                print(exc)  
+            """
+            # TODO в данном случае ты передаешь экземпляр исключения IamGodError в переменную exc
+            #  и можешь ео распечатать
             cprint('Билл Мюррей почувстовал себя богом', color='red')
             IamGodError.total += 1
         except DrunkError:
