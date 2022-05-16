@@ -24,26 +24,25 @@
 
 
 class NotNameError(Exception):
-    pass
+
+    def __str__(self) -> str:
+        return 'Поле "Имя" содержит не только буквы'
 
 
 class NotEmailError(Exception):
-    pass
+
+    def __str__(self):
+        return 'Поле "Емейл" не содержит @ и/или . (точку)'
 
 
-# TODO проверка данных на корректность называется валидацией
-def check(test_line: str) -> None:
-    test_list = test_line.split()
-    # TODO name, email, age = input_data
-    if len(test_list) != 3:
-        raise ValueError('Не присутствуют все 3 поля')
-    elif not test_list[0].isalpha():
-        raise NotNameError('Поле "Имя" содержит не только буквы')  # TODO похоже на текстовое представление ошибки
-    elif '@' not in test_list[1] or '.' not in test_list[1]:
-        # TODO похоже на текстовое представление ошибки
-        raise NotEmailError('Поле "Емейл" не содержит @ и/или . (точку)')
+def validation(test_line: str) -> None:
+    name, email, age = test_line.split()
+    if not name.isalpha():
+        raise NotNameError
+    elif '@' not in email or '.' not in email:
+        raise NotEmailError
     try:
-        age = int(test_list[2])
+        age = int(age)
     except ValueError:
         raise ValueError('Поле "Возраст" не является числом')
     else:
@@ -62,17 +61,8 @@ if __name__ == '__main__':
         for line in text:
             line = line.strip()
             try:
-                check(line)
-
-            except ValueError as exp:
-                # TODO 3 блока - один и тот же код
-                """
-                except (ValueError, NotNameError , NotEmailError) as exc ?
-                """
-                write_error(bad_file, line, str(exp))
-            except NotNameError as exp:
-                write_error(bad_file, line, str(exp))
-            except NotEmailError as exp:
+                validation(line)
+            except (ValueError, NotNameError, NotEmailError) as exp:
                 write_error(bad_file, line, str(exp))
             else:
                 with open('registrations_good.log', 'a', encoding='utf8') as good_file:
