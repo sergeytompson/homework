@@ -48,6 +48,7 @@ class PrimeNumbers:
             raise StopIteration
 
 
+# TODO сделай один блок "if __name__ == '__main__'" и пиши все вызовы там, по кодлу не оч удобно вызовы искать
 if __name__ == '__main__':
     prime_number_iterator = PrimeNumbers(n=10000)
     for number in prime_number_iterator:
@@ -71,7 +72,7 @@ def prime_numbers_generator(n: int) -> Generator:
 
 
 if __name__ == '__main__':
-    for number in prime_numbers_generator(n=10000):
+    for number in prime_numbers_generator(n=10000):  # TODO по n включительно?
         print(number)
 
 
@@ -97,7 +98,9 @@ def is_lucky_number(num: int) -> bool:
     if length == 1:
         return False
     half = length // 2
+    # TODO можно обойтись без условного блока, если вспомнить срезы и как работают отрицательные числа внутри срезов
     if length % 2:
+        # TODO можно сократить с помощью map
         return sum(int(i) for i in str_num[:half]) == sum(int(i) for i in str_num[half + 1:])
     else:
         return sum(int(i) for i in str_num[:half]) == sum(int(i) for i in str_num[half:])
@@ -116,6 +119,7 @@ if __name__ == '__main__':
 
 
 def is_palindrome(num: int) -> bool:
+    # TODO функцию можно умесить буквально в одну-три строчки, если вспомнить срезы и их свойства
     str_num = str(num)
     length = len(str_num)
     if length == 1:
