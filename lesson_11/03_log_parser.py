@@ -28,12 +28,14 @@ class LogParser:
                 self._get_stat(line=line)
 
     def _get_stat(self, line: str) -> None:
-        time = line[:17] + ']'
-        # TODO тз:  и выдает число событий "NOK" за каждую минуту
-        if time in self.time_dict:
-            self.time_dict[time] += 1
+        if line[-3:] == 'NOK':
+            return
         else:
-            self.time_dict[time] = 1
+            time = line[:17] + ']'
+            if time in self.time_dict:
+                self.time_dict[time] += 1
+            else:
+                self.time_dict[time] = 1
 
     def __iter__(self):
         self._read()
@@ -61,6 +63,8 @@ def log_parser(file: str) -> tuple:
     with open(file, 'r') as text:
         for line in text:
             line = line.strip()
+            if line[-3:] == 'NOK':
+                continue
             time = line[:17] + ']'
             # TODO тз:  и выдает число событий "NOK" за каждую минуту
             if time in time_dict:

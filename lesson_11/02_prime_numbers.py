@@ -48,13 +48,6 @@ class PrimeNumbers:
             raise StopIteration
 
 
-# TODO сделай один блок "if __name__ == '__main__'" и пиши все вызовы там, по кодлу не оч удобно вызовы искать
-if __name__ == '__main__':
-    prime_number_iterator = PrimeNumbers(n=10000)
-    for number in prime_number_iterator:
-        print(number)
-
-
 # Часть 2
 # Теперь нужно создать генератор, который выдает последовательность простых чисел до n
 # Распечатать все простые числа до 10000 в столбик
@@ -69,11 +62,6 @@ def prime_numbers_generator(n: int) -> Generator:
         else:
             prime_numbers.append(num)
             yield num
-
-
-if __name__ == '__main__':
-    for number in prime_numbers_generator(n=10000):  # TODO по n включительно?
-        print(number)
 
 
 # Часть 3
@@ -98,60 +86,13 @@ def is_lucky_number(num: int) -> bool:
     if length == 1:
         return False
     half = length // 2
-    # TODO можно обойтись без условного блока, если вспомнить срезы и как работают отрицательные числа внутри срезов
-    if length % 2:
-        # TODO можно сократить с помощью map
-        return sum(int(i) for i in str_num[:half]) == sum(int(i) for i in str_num[half + 1:])
-    else:
-        return sum(int(i) for i in str_num[:half]) == sum(int(i) for i in str_num[half:])
-
-
-if __name__ == '__main__':
-    prime_number_iterator = PrimeNumbers(n=10000)
-    '''Способ применения 1'''
-    for value in filter(is_lucky_number, prime_number_iterator):
-        print(value)
-
-    '''Способ применения 2'''
-    for value in prime_number_iterator:
-        if is_lucky_number(value):
-            print(value)
+    return sum(map(int, str_num[:half])) == sum(map(int, str_num[-half:]))
 
 
 def is_palindrome(num: int) -> bool:
-    # TODO функцию можно умесить буквально в одну-три строчки, если вспомнить срезы и их свойства
     str_num = str(num)
-    length = len(str_num)
-    if length == 1:
-        return False
-    half = length // 2
-    for i in range(half):
-        if str_num[i] != str_num[-i - 1]:
-            return False
-    else:
-        return True
-
-
-if __name__ == '__main__':
-    '''Способ применения 1'''
-    prime_number_iterator = PrimeNumbers(n=10000)
-    for value in filter(is_palindrome, prime_number_iterator):
-        print(value)
-
-    '''Способ применения 2'''
-    for value in prime_number_iterator:
-        if is_palindrome(value):
-            print(value)
-
-
-if __name__ == '__main__':
-    '''Смашанное применение'''
-    prime_number_iterator = PrimeNumbers(n=10000)
-    for value in filter(is_palindrome, filter(is_lucky_number, prime_number_iterator)):
-        print(value)
-
-
-'''моя функция-фильтр'''
+    half = len(str_num) // 2
+    return str_num[:half] == str_num[:-half - 1:-1]
 
 
 def is_fibonachi(num: int) -> bool:
@@ -167,5 +108,29 @@ def is_fibonachi(num: int) -> bool:
 
 if __name__ == '__main__':
     prime_number_iterator = PrimeNumbers(n=10000)
+    for number in prime_number_iterator:
+        print(number)
+
+    for number in prime_numbers_generator(n=10000):
+        print(number)
+
+    for value in filter(is_lucky_number, prime_number_iterator):
+        print(value)
+
+    for value in prime_number_iterator:
+        if is_lucky_number(value):
+            print(value)
+
+    prime_number_iterator = PrimeNumbers(n=10000)
+    for value in filter(is_palindrome, prime_number_iterator):
+        print(value)
+
+    for value in prime_number_iterator:
+        if is_palindrome(value):
+            print(value)
+
+    for value in filter(is_palindrome, filter(is_lucky_number, prime_number_iterator)):
+        print(value)
+
     for value in filter(is_fibonachi, prime_number_iterator):
         print(value)
