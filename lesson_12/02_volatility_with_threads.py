@@ -52,7 +52,7 @@ class VolatilityEstimator(Thread):
 
 
 # @func_timer
-def main(path):
+def main(path: str) -> None:
     tickers = []
     zero_volatility = []
     estimators = []
