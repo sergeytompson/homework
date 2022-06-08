@@ -22,7 +22,7 @@ from multiprocessing import Process, Queue
 from typing import List
 
 
-# from timer import func_timer
+from timer import func_timer
 
 
 class VolatilityEstimator(Process):
@@ -52,13 +52,16 @@ class VolatilityEstimator(Process):
         lst.append(price)
 
 
-# @func_timer
+@func_timer
 def main(path: str) -> None:
     tickers = []
     zero_volatility = []
     estimators = []
     queue = Queue()
     for dir_path, _, filenames in os.walk(path):
+        # TODO отличие многопроцессорного режима в том что создаются именно "процессы" операционной системы,
+        #  число единовременных процессов, как правило, ограничивают числом ядер на машине multiprocessing.cpu_count(),
+        #  это просто чтоб знал :)
         for file in filenames:
             file_name = os.path.join(dir_path, file)
             estimators.append(VolatilityEstimator(file_name, queue))

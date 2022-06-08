@@ -21,7 +21,7 @@
 import os
 from threading import Thread
 from typing import List
-# from timer import func_timer
+from timer import func_timer
 
 
 class VolatilityEstimator(Thread):
@@ -51,7 +51,7 @@ class VolatilityEstimator(Thread):
         lst.append(price)
 
 
-# @func_timer
+@func_timer
 def main(path: str) -> None:
     tickers = []
     zero_volatility = []

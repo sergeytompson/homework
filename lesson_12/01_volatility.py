@@ -75,7 +75,7 @@
 import os
 from typing import List
 
-# from timer import func_timer
+from timer import func_timer
 
 
 class VolatilityEstimator:
@@ -99,12 +99,14 @@ class VolatilityEstimator:
             self.volatility = round((max_price - min_price) / mid_price * 100, 2)
 
     @staticmethod
-    def _get_price(price: str, lst: List) -> None:
+    def _get_price(price: str, lst: List[float]) -> None:
+        # TODO использование List из typing не ошибка, но обычно его импортируют, чтоб аннотировать содержимое,
+        #  например: List[float]
         price = float(price)
         lst.append(price)
 
 
-# @func_timer
+@func_timer
 def main(path: str) -> None:
     tickers = []
     zero_volatility = []
