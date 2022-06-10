@@ -59,9 +59,6 @@ def main(path: str) -> None:
     estimators = []
     queue = Queue()
     for dir_path, _, filenames in os.walk(path):
-        # TODO отличие многопроцессорного режима в том что создаются именно "процессы" операционной системы,
-        #  число единовременных процессов, как правило, ограничивают числом ядер на машине multiprocessing.cpu_count(),
-        #  это просто чтоб знал :)
         for file in filenames:
             file_name = os.path.join(dir_path, file)
             estimators.append(VolatilityEstimator(file_name, queue))

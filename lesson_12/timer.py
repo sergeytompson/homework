@@ -19,8 +19,6 @@ def func_timer(func):
 
         end_time = time.time()
         work_time = end_time - start_time
-        # TODO - проблема с кодировкой, была cp1251 - кодировка Windows, такое может случится,
-        #  если текст был скопирован и приложения Windows (блокнот, MS Word), PC - по умолчанию работает с UTF-8
         print(f'Функция отработала {work_time} секунд{get_suffix_by_amount(work_time)}')
         return result
     return surrogate

@@ -100,8 +100,6 @@ class VolatilityEstimator:
 
     @staticmethod
     def _get_price(price: str, lst: List[float]) -> None:
-        # TODO использование List из typing не ошибка, но обычно его импортируют, чтоб аннотировать содержимое,
-        #  например: List[float]
         price = float(price)
         lst.append(price)
 
