@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw, ImageFont
 # Пример заполнения lesson_013/images/ticket_sample.png
 # Подходящий шрифт искать на сайте ofont.ru
 
-
+# TODO по "питонячему" будет _from, а не from_, не ошибка, просто так принято
 def make_ticket(fio: str, from_: str, to: str, date: str, save_to: str) -> None:
     img = Image.open('images/ticket_template.png')
     draw = ImageDraw.Draw(img)
