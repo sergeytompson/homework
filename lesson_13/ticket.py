@@ -10,13 +10,13 @@ from PIL import Image, ImageDraw, ImageFont
 # Пример заполнения lesson_013/images/ticket_sample.png
 # Подходящий шрифт искать на сайте ofont.ru
 
-# TODO по "питонячему" будет _from, а не from_, не ошибка, просто так принято
-def make_ticket(fio: str, from_: str, to: str, date: str, save_to: str) -> None:
+
+def make_ticket(fio: str, _from: str, to: str, date: str, save_to: str) -> None:
     img = Image.open('images/ticket_template.png')
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype('Acherus Feral.ttf', size=15)
     draw.text((45, 130), fio, font=font, anchor='lm', fill='#000000')
-    draw.text((45, 200), from_, font=font, anchor='lm', fill='#000000')
+    draw.text((45, 200), _from, font=font, anchor='lm', fill='#000000')
     draw.text((45, 265), to, font=font, anchor='lm', fill='#000000')
     draw.text((285, 265), date, font=font, anchor='lm', fill='#000000')
     img.show()
@@ -27,12 +27,8 @@ def make_ticket(fio: str, from_: str, to: str, date: str, save_to: str) -> None:
 
 
 if __name__ == '__main__':
-    make_ticket(input('Введите ФИО: '),
-                input('Введите аэропорт вылета: '),
-                input('Введите аэропорт прилета: '),
-                input('Введите дату: '),
-                input('В какой файл сохранить? (Нажмите ENTER, если сохранять не нужно): ')
-                )
+    make_ticket(input('Введите ФИО: '), input('Введите аэропорт вылета: '), input('Введите аэропорт прилета: '),
+                input('Введите дату: '), input('В какой файл сохранить? (Нажмите ENTER, если сохранять не нужно): '))
 
 
 # Усложненное задание (делать по желанию).

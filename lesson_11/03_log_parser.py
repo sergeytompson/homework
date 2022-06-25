@@ -66,7 +66,6 @@ def log_parser(file: str) -> tuple:
             if line[-3:] == 'NOK':
                 continue
             time = line[:17] + ']'
-            # TODO тз:  и выдает число событий "NOK" за каждую минуту
             if time in time_dict:
                 time_dict[time] += 1
             else:
