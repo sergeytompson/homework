@@ -30,7 +30,7 @@
 #   Количество очков для результатов ХХХ - УУУ.
 
 import argparse
-import bowling
+from lesson_14.bowling import bowling
 
 
 parser = argparse.ArgumentParser('Calculate points')
@@ -42,4 +42,3 @@ print(args.result, ' - ', result)
 # При написании кода помнить, что заказчик может захотеть доработок и новых возможностей...
 # И, возможно, вам пригодится паттерн проектирования "Состояние",
 #   см https://clck.ru/Fudd8 и https://refactoring.guru/ru/design-patterns/state
-
