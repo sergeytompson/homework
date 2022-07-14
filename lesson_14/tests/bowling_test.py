@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from lesson_14.bowling import bowling, bowling_errors
+from homework.lesson_14.bowling import bowling, bowling_errors
 import unittest
 
 
