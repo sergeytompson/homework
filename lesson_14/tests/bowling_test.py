@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from homework.lesson_14.bowling import bowling, bowling_errors
+from homework.lesson_14.bowling import bowling, exceptions
 import unittest
 
 
@@ -26,16 +26,16 @@ class BowlingTest(unittest.TestCase):
         self.assertRaises(TypeError, bowling.get_score, 1)
 
     def test_wrong_symbol(self):
-        self.assertRaises(bowling_errors.IncorrectSymbolError, bowling.get_score, '%XXXXXXXXX')
+        self.assertRaises(exceptions.IncorrectSymbolException, bowling.get_score, '%XXXXXXXXX')
 
     def test_too_mach(self):
-        self.assertRaises(bowling_errors.ExcessSkittlesError, bowling.get_score, '99999999999999999999')
+        self.assertRaises(exceptions.ExcessSkittlesException, bowling.get_score, '99999999999999999999')
 
     def test_finishing_first(self):
-        self.assertRaises(bowling_errors.BackSlashInFirstThrowError, bowling.get_score, '/')
+        self.assertRaises(exceptions.BackSlashInFirstThrowException, bowling.get_score, '/')
 
     def test_second_X(self):
-        self.assertRaises(bowling_errors.XInSecondThrowError, bowling.get_score, '1X')
+        self.assertRaises(exceptions.XInSecondThrowException, bowling.get_score, '1X')
 
 
 if __name__ == '__main__':

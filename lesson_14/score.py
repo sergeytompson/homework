@@ -37,7 +37,7 @@ parser = argparse.ArgumentParser('Calculate points')
 parser.add_argument('--result', dest='result', type=str, required=True)
 args = parser.parse_args()
 result = bowling.get_score(args.result)
-print(args.result, ' - ', result)
+print(args.result, '-', result)
 
 # При написании кода помнить, что заказчик может захотеть доработок и новых возможностей...
 # И, возможно, вам пригодится паттерн проектирования "Состояние",
